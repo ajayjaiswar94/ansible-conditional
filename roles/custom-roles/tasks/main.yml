@@ -12,14 +12,14 @@
   debug:
     var: ansible_facts['kernal_version'] ##when the below 2 condition are passwd then it will show you the kernal version
   when:
-    - ansible_facts['os_family'] == ""Debian"
+    - ansible_facts['os_family'] == "Debian"
     - ansible_facts['distribution_major_version'] == "20"
     
 - name: setting complex condition
   debug:
-    var: ansible_facts['kernal_version'] 
+    var: ansible_facts['kernel_version'] 
   when:
-    - ansible_facts['os_family'] == ""Debian" and ansible_facts['distribution_major_version'] | >= "20"
+    - ansible_facts['os_family'] == "Debian" and ansible_facts['distribution_major_version'] | int >= 20
 
 - name: regiter the variable
   ansible.builtin.command: cat /home/ansible/test-file.txt
@@ -31,7 +31,7 @@
   when: test_file_content.stdout.find('hi') != -1
 
 - name: run the items greater then 5
-  ansible.builtin.command: echi {{ item  }} # this will check the condition which number is greater 
+  ansible.builtin.command: echo {{ item  }} # this will check the condition which number is greater 
   loop: [0, 2, 4, 6, 8, 10]
   when: item > 5
   
