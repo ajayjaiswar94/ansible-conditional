@@ -1,0 +1,37 @@
+---
+## Boolean conditional for installing the apache package
+- name: install apache 2
+  apt:
+    name: apache2
+    state: absent
+  when: install_apache_flag   #### the Boolean value stored in /roles/custom-roles/vars/main.yml file
+
+## putting multiple condition using ansible-fact
+
+- name: combine condition using ansible_fact
+  debug:
+    var: ansible_facts['kernal_version'] ##when the below 2 condition are passwd then it will show you the kernal version
+  when:
+    - ansible_facts['os_family'] == ""Debian"
+    - ansible_facts['distribution_major_version'] == "20"
+    
+- name: setting complex condition
+  debug:
+    var: ansible_facts['kernal_version'] 
+  when:
+    - ansible_facts['os_family'] == ""Debian" and ansible_facts['distribution_major_version'] | >= "20"
+
+- name: regiter the variable
+  ansible.builtin.command: cat /home/ansible/test-file.txt
+  register: test_file_content
+
+- name: use the variable in conditional statement
+  debug:
+    var: test_file_content.stdout #when the below condition is true when checking hi comment in file then it will work
+  when: test_file_content.stdout.find('hi') != -1
+
+- name: run the items greater then 5
+  ansible.builtin.command: echi {{ item  }} # this will check the condition which number is greater 
+  loop: [0, 2, 4, 6, 8, 10]
+  when: item > 5
+  
